@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kevin &amp; Lorena · 31 de Mayo 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Great+Vibes&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;font-family:'Cormorant Garamond',Georgia,serif;background:#1a2810}
+
+/* ─── ESCENA SOBRE ─── */
+#scene{
+  min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.6rem;
+  background:radial-gradient(ellipse at center, #243318 0%, #111d09 100%);
+  cursor:pointer;padding:2rem;
+}
+.env-hint{
+  font-size:12px;letter-spacing:.28em;color:#8a9e6a;
+  text-transform:uppercase;animation:pulse 2.2s infinite;
+  font-family:'Cormorant Garamond',serif;font-weight:300;
+}
+@keyframes pulse{0%,100%{opacity:.3}50%{opacity:.9}}
+
+/* Sobre 3-D */
+.envelope{
+  width:340px;height:220px;
+  position:relative;
+  filter:drop-shadow(0 12px 32px rgba(0,0,0,.7));
+  transition:transform .3s;
+}
+.envelope:hover{transform:translateY(-4px)}
+
+/* Cuerpo */
+.env-body{
+  position:absolute;bottom:0;left:0;
+  width:100%;height:190px;
+  background:linear-gradient(160deg,#3d5430 0%,#2e3f22 100%);
+  border-radius:2px 2px 4px 4px;
+  border:1px solid #4a6335;
+}
+/* Sombra interior del cuerpo */
+.env-body::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(to bottom, rgba(0,0,0,.18) 0%, transparent 40%);
+  border-radius:inherit;
+}
+
+/* Fondo del triángulo trasero (más oscuro) */
+.env-back{
+  position:absolute;top:0;left:0;width:0;height:0;
+  border-left:170px solid transparent;
+  border-right:170px solid transparent;
+  border-top:110px solid #243318;
+  z-index:1;
+}
+/* Triángulos laterales */
+.env-left{
+  position:absolute;bottom:0;left:0;width:0;height:0;
+  border-bottom:95px solid #364d25;
+  border-right:170px solid transparent;
+  z-index:2;
+}
+.env-right{
+  position:absolute;bottom:0;right:0;width:0;height:0;
+  border-bottom:95px solid #2e4220;
+  border-left:170px solid transparent;
+  z-index:2;
+}
+
+/* Solapa delantera */
+.env-flap{
+  position:absolute;top:0;left:0;width:0;height:0;
+  border-left:170px solid transparent;
+  border-right:170px solid transparent;
+  border-top:110px solid #4a6335;
+  z-index:4;
+  transform-origin:top center;
+  transition:transform .75s cubic-bezier(.4,0,.2,1);
+}
+.envelope.opened .env-flap{transform:rotateX(-185deg)}
+
+/* Línea de doblez en la solapa */
+.env-flap::after{
+  content:'';
+  position:absolute;
+  top:-108px;left:-170px;
+  width:340px;height:1px;
+  background:rgba(255,255,255,.08);
+}
+
+/* Sello lacre */
+.env-seal{
+  position:absolute;top:62px;left:50%;
+  transform:translateX(-50%);
+  width:44px;height:44px;
+  background:radial-gradient(circle at 35% 35%, #dac98a, #b8960a);
+  border-radius:50%;z-index:5;
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;color:#2a3e1a;
+  font-family:'Playfair Display',serif;font-style:italic;font-weight:500;
+  border:2px solid #c9aa4a;
+  box-shadow:0 2px 8px rgba(0,0,0,.5),inset 0 1px 2px rgba(255,255,255,.3);
+  transition:transform .35s .1s,opacity .35s .1s;
+}
+.envelope.opened .env-seal{transform:translateX(-50%) scale(0);opacity:0}
+
+/* Carta interior — COMPLETAMENTE OCULTA antes de abrir */
+.env-letter{
+  position:absolute;bottom:12px;left:50%;
+  transform:translateX(-50%);
+  width:250px;height:155px;
+  background:#f8f5ee;
+  border-radius:1px;z-index:3;
+  display:flex;align-items:center;justify-content:center;
+  border:.5px solid #c9b882;
+  /* ocultar completamente */
+  clip-path:inset(0 0 100% 0);
+  transition:clip-path .0s, bottom .55s .4s, transform .55s .4s;
+}
+.envelope.opened .env-letter{
+  clip-path:inset(0 0 0% 0);
+  bottom:52px;
+  transform:translateX(-50%) translateY(-48px);
+}
+.env-li{text-align:center;padding:12px}
+.env-li .sm{font-size:10px;letter-spacing:.22em;color:#6b7c5a;text-transform:uppercase;margin-bottom:7px}
+.env-li .nm{font-family:'Great Vibes',cursive;font-size:28px;color:#2e3f22;line-height:1.1}
+.env-li .dt{font-size:11px;letter-spacing:.15em;color:#8a7a5a;text-transform:uppercase;margin-top:5px;font-weight:300}
+
+/* ─── INVITACIÓN ─── */
+.invite{display:none;width:100%;animation:fadeUp .9s ease forwards}
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+.invite.visible{display:block}
+
+/* HERO */
+.hero{position:relative;width:100%;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;background:#1a2810}
+.hero-bg{position:absolute;inset:0;background-image:url('foto1.jpg');background-size:cover;background-position:center}
+.hero-overlay{position:absolute;inset:0;background:rgba(15,28,6,.50)}
+.hero-content{position:relative;z-index:2;text-align:center;padding:3rem 1.5rem;width:100%}
+
+.nos-casamos{font-family:'Great Vibes',cursive;font-size:58px;color:#e8dfc0;line-height:1.1;margin-bottom:.5rem;text-shadow:0 2px 14px rgba(0,0,0,.6)}
+.hero-names{font-family:'Great Vibes',cursive;font-size:88px;color:#fff;line-height:1;text-shadow:0 3px 18px rgba(0,0,0,.6)}
+.hero-amp{display:block;font-family:'Great Vibes',cursive;font-size:66px;color:#c9b882;line-height:.9}
+.hero-date{font-size:20px;letter-spacing:.28em;color:#e8e0c8;text-transform:uppercase;margin-top:1.2rem;font-weight:300;text-shadow:0 1px 8px rgba(0,0,0,.5)}
+
+/* SECCIONES */
+.green-section{background:#243318;padding:2.8rem 1.5rem}
+.sec-inner{max-width:500px;margin:0 auto;text-align:center}
+.dark-section{background:#1a2810;padding:2.8rem 1.5rem}
+.dark-inner{max-width:500px;margin:0 auto;text-align:center}
+
+/* COUNTDOWN */
+.countdown{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0 auto 2rem;max-width:360px}
+.cd-box{background:#3a5028;border-radius:6px;padding:14px 4px;border:.5px solid #5a7a38}
+.cd-num{font-family:'Playfair Display',serif;font-size:32px;color:#e8e0c8;line-height:1;display:block;text-align:center}
+.cd-lbl{font-size:11px;letter-spacing:.15em;color:#a0b882;text-transform:uppercase;margin-top:5px;display:block;text-align:center}
+
+/* TIMELINE */
+.timeline{text-align:left;border-left:1px solid #5a7a38;margin:1rem auto;max-width:320px;padding-left:1.5rem}
+.tl-item{position:relative;margin-bottom:1.4rem}
+.tl-item:last-child{margin-bottom:0}
+.tl-dot{position:absolute;left:-1.97rem;top:4px;width:10px;height:10px;background:#c9b882;border-radius:50%;border:2px solid #1a2810}
+.tl-time{font-size:12px;letter-spacing:.18em;color:#8a9e6a;text-transform:uppercase;margin-bottom:2px}
+.tl-name{font-family:'Playfair Display',serif;font-size:18px;color:#e8e0c8;font-style:italic}
+.tl-place{font-size:13px;color:#8a9e6a;margin-top:1px}
+
+/* DIVIDER */
+.divider{display:flex;align-items:center;justify-content:center;gap:10px;margin:1.4rem 0}
+.dl{flex:1;max-width:90px;height:.5px;background:#5a7a38}
+.dd{width:6px;height:6px;background:#c9b882;transform:rotate(45deg);flex-shrink:0}
+
+/* SECTION HEADER */
+.section-title{font-family:'Great Vibes',cursive;font-size:44px;color:#c9b882;margin-bottom:.2rem;line-height:1.1}
+.section-sub{font-size:12px;letter-spacing:.25em;color:#8a9e6a;text-transform:uppercase;margin-bottom:1.6rem;font-weight:300}
+
+/* SLIDER */
+.slider-section{background:#1a2810;padding:2.5rem 0 2.5rem}
+.slider-wrap{overflow-x:auto;width:100%;cursor:grab;user-select:none;scrollbar-width:none;-ms-overflow-style:none}
+.slider-wrap::-webkit-scrollbar{display:none}
+.slider-track{display:flex;gap:24px;padding:24px 44px 32px;width:max-content}
+.polaroid{flex-shrink:0;width:230px;background:#fff;padding:13px 13px 42px;border-radius:1px;transform:rotate(-3deg);box-shadow:5px 8px 24px rgba(0,0,0,.65),0 1px 3px rgba(0,0,0,.4);transition:transform .3s}
+.polaroid:nth-child(even){transform:rotate(2.5deg)}
+.polaroid:nth-child(3n){transform:rotate(-1.5deg)}
+.polaroid:hover{transform:rotate(0deg) scale(1.06)!important;z-index:10}
+.polaroid-img{width:100%;height:190px;object-fit:cover;display:block;background:#2e4220}
+.polaroid-caption{text-align:center;font-family:'Great Vibes',cursive;font-size:20px;color:#3a5028;margin-top:8px}
+.slider-hint{text-align:center;font-size:14px;color:#6b7c5a;margin-top:1rem;letter-spacing:.1em;font-style:italic}
+
+/* VESTIMENTA */
+.dress-card{background:#243318;border:.5px solid #5a7a38;border-radius:8px;padding:1.8rem}
+.dress-row{display:flex;align-items:flex-start;gap:14px;margin-bottom:1.2rem;text-align:left;padding-bottom:1.2rem;border-bottom:.5px solid rgba(90,122,56,.3)}
+.dress-row:last-of-type{margin-bottom:0;padding-bottom:0;border-bottom:none}
+.dress-icon{flex-shrink:0;margin-top:2px}
+.dress-text strong{font-family:'Playfair Display',serif;font-size:17px;color:#e8e0c8;font-style:italic;display:block;margin-bottom:4px}
+.dress-text p{font-size:15px;color:#c8d8b0;line-height:1.7}
+.no-white{background:rgba(120,60,60,.15);border:.5px solid rgba(180,100,100,.3);border-radius:6px;padding:12px 16px;margin-top:1.2rem;display:flex;align-items:center;gap:12px}
+.no-white p{font-size:14px;color:#d4a8a8;font-style:italic;line-height:1.6}
+.palette{display:flex;gap:10px;justify-content:center;margin-top:1.4rem;flex-wrap:wrap}
+.swatch-wrap{display:flex;flex-direction:column;align-items:center;gap:4px}
+.swatch{width:34px;height:34px;border-radius:50%;border:.5px solid rgba(255,255,255,.12)}
+.swatch-lbl{font-size:10px;color:#6b7c5a;letter-spacing:.05em}
+
+/* REGALOS */
+.gifts-card{background:#243318;border:.5px solid #5a7a38;border-radius:8px;padding:1.8rem}
+.gift-msg{font-size:16px;color:#c8d8b0;line-height:1.85;font-style:italic;margin-bottom:1.6rem}
+.transfer-box{background:#1a2810;border:.5px solid #4a6335;border-radius:6px;padding:1.2rem 1.4rem;margin-bottom:1rem}
+.transfer-bank{font-size:11px;letter-spacing:.22em;color:#8a9e6a;text-transform:uppercase;margin-bottom:.4rem}
+.transfer-name{font-family:'Playfair Display',serif;font-size:18px;color:#e8e0c8;font-style:italic;margin-bottom:.3rem}
+.transfer-num{font-size:20px;color:#c9b882;letter-spacing:.06em;margin-bottom:.2rem}
+.transfer-clabe{font-size:13px;color:#8a9e6a;letter-spacing:.04em}
+.copy-btn{background:transparent;border:.5px solid #5a7a38;color:#a0b882;font-size:12px;letter-spacing:.15em;text-transform:uppercase;padding:6px 14px;border-radius:4px;cursor:pointer;margin-top:.8rem;font-family:'Cormorant Garamond',serif;transition:all .2s;display:inline-block}
+.copy-btn:hover{background:#3a5028;color:#e8e0c8}
+.copy-ok{display:none;font-size:12px;color:#a0b882;margin-top:5px;font-style:italic}
+
+/* BOTONES */
+.btns-section{background:#243318;padding:1.8rem 1.5rem 2.5rem}
+.btns-inner{max-width:500px;margin:0 auto}
+.btns-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.btn-o{background:#3a5028;color:#e8e0c8;border:.5px solid #5a7a38;border-radius:6px;padding:15px 8px;font-family:'Cormorant Garamond',serif;font-size:16px;letter-spacing:.06em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .2s;text-decoration:none;width:100%}
+.btn-o:hover{background:#2e4220}
+.btn-full{width:100%;background:#c9b882;color:#1a2810;border:none;border-radius:6px;padding:16px;font-family:'Playfair Display',serif;font-size:18px;font-style:italic;cursor:pointer;letter-spacing:.05em;transition:background .2s}
+.btn-full:hover{background:#b5a065}
+.form-box{display:none;background:#1a2810;border:.5px solid #5a7a38;border-radius:6px;padding:20px;margin-top:12px;animation:fadeUp .4s ease}
+.form-box.show{display:block}
+.form-box p{font-family:'Playfair Display',serif;font-size:18px;color:#e8e0c8;font-style:italic;margin-bottom:14px;text-align:center}
+.form-box input{width:100%;margin-bottom:10px;padding:11px 14px;border:.5px solid #5a7a38;border-radius:6px;font-family:'Cormorant Garamond',serif;font-size:16px;background:#243318;color:#e8e0c8}
+.form-box input::placeholder{color:#6b7c5a}
+.form-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fbtn-y{background:#3a5028;color:#e8e0c8;border:none;border-radius:6px;padding:12px;font-family:'Cormorant Garamond',serif;font-size:16px;cursor:pointer;transition:background .2s}
+.fbtn-y:hover{background:#2e4220}
+.fbtn-n{background:transparent;color:#c8d8b0;border:.5px solid #5a7a38;border-radius:6px;padding:12px;font-family:'Cormorant Garamond',serif;font-size:16px;cursor:pointer}
+.thanks-box{display:none;background:#1a2810;border:.5px solid #5a7a38;border-radius:6px;padding:20px;margin-top:12px;text-align:center;animation:fadeUp .4s ease}
+.thanks-box.show{display:block}
+.thanks-box p{font-family:'Playfair Display',serif;font-size:17px;color:#c8d8b0;font-style:italic;line-height:1.8}
+
+.hashtag{text-align:center;padding:1.8rem 1rem 2.8rem;font-size:15px;color:#6b7c5a;font-style:italic;letter-spacing:.07em;background:#1a2810}
+
+@media(max-width:420px){
+  .nos-casamos{font-size:44px}.hero-names{font-size:68px}.hero-amp{font-size:52px}.hero-date{font-size:16px}
+  .countdown{max-width:280px}.cd-num{font-size:26px}
+  .polaroid{width:185px}.polaroid-img{height:150px}
+  .envelope{width:280px;height:184px}
+  .env-back,.env-flap{border-left-width:140px;border-right-width:140px}
+  .env-left,.env-right{border-right-width:140px;border-left-width:140px}
+}
+</style>
+</head>
+<body>
+
+<!-- ─── SOBRE ─── -->
+<div id="scene" onclick="openEnvelope()">
+  <div class="envelope" id="envelope">
+    <div class="env-body"></div>
+    <div class="env-back"></div>
+    <div class="env-left"></div>
+    <div class="env-right"></div>
+    <div class="env-flap"></div>
+    <div class="env-seal">K&amp;L</div>
+    <div class="env-letter">
+      <div class="env-li">
+        <div class="sm">¡Nos casamos!</div>
+        <div class="nm">Kevin &amp; Lorena</div>
+        <div class="dt">31 · Mayo · 2026</div>
+      </div>
+    </div>
+  </div>
+  <p class="env-hint">Toca para abrir</p>
+</div>
+
+<!-- ─── INVITACIÓN ─── -->
+<div class="invite" id="invite">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <svg width="250" height="34" viewBox="0 0 250 34" fill="none" style="margin-bottom:.8rem">
+        <path d="M12 17 Q62 4 125 17 Q188 30 238 17" stroke="rgba(255,255,255,.45)" stroke-width=".8" fill="none"/>
+        <ellipse cx="42" cy="9" rx="11" ry="3.5" fill="rgba(255,255,255,.28)" transform="rotate(-18 42 9)"/>
+        <ellipse cx="72" cy="6" rx="11" ry="3.5" fill="rgba(255,255,255,.22)" transform="rotate(-6 72 6)"/>
+        <ellipse cx="100" cy="9" rx="11" ry="3.5" fill="rgba(255,255,255,.28)" transform="rotate(4 100 9)"/>
+        <ellipse cx="125" cy="14" rx="12" ry="4" fill="rgba(255,255,255,.33)"/>
+        <ellipse cx="150" cy="19" rx="11" ry="3.5" fill="rgba(255,255,255,.28)" transform="rotate(-4 150 19)"/>
+        <ellipse cx="178" cy="22" rx="11" ry="3.5" fill="rgba(255,255,255,.22)" transform="rotate(6 178 22)"/>
+        <ellipse cx="208" cy="21" rx="11" ry="3.5" fill="rgba(255,255,255,.28)" transform="rotate(18 208 21)"/>
+        <circle cx="125" cy="14" r="3" fill="#c9b882" opacity=".7"/>
+      </svg>
+
+      <p class="nos-casamos">¡Nos casamos!</p>
+      <div class="hero-names">Kevin<span class="hero-amp">&amp;</span>Lorena</div>
+      <p class="hero-date">31 &nbsp;·&nbsp; Mayo &nbsp;·&nbsp; 2026</p>
+
+      <svg width="250" height="34" viewBox="0 0 250 34" fill="none" style="margin-top:.8rem">
+        <path d="M12 17 Q62 30 125 17 Q188 4 238 17" stroke="rgba(255,255,255,.45)" stroke-width=".8" fill="none"/>
+        <ellipse cx="42" cy="25" rx="11" ry="3.5" fill="rgba(255,255,255,.28)" transform="rotate(18 42 25)"/>
+        <ellipse cx="72" cy="28" rx="11" ry="3.5" fill="rgba(255,255,255,.22)" transform="rotate(6 72 28)"/>
+        <ellipse cx="100" cy="25" rx="11" ry="3.5" fill="rgba(255,255,255,.28)" transform="rotate(-4 100 25)"/>
+        <ellipse cx="125" cy="20" rx="12" ry="4" fill="rgba(255,255,255,.33)"/>
+        <ellipse cx="150" cy="15" rx="11" ry="3.5" fill="rgba(255,255,255,.28)" transform="rotate(4 150 15)"/>
+        <ellipse cx="178" cy="12" rx="11" ry="3.5" fill="rgba(255,255,255,.22)" transform="rotate(-6 178 12)"/>
+        <ellipse cx="208" cy="13" rx="11" ry="3.5" fill="rgba(255,255,255,.28)" transform="rotate(-18 208 13)"/>
+        <circle cx="125" cy="20" r="3" fill="#c9b882" opacity=".7"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- CUENTA REGRESIVA + PROGRAMA -->
+  <div class="green-section">
+    <div class="sec-inner">
+      <div class="divider"><div class="dl"></div><div class="dd"></div><div class="dd" style="opacity:.4;margin:0 -3px;transform:rotate(45deg) scale(.6)"></div><div class="dd"></div><div class="dl"></div></div>
+      <p style="font-size:13px;letter-spacing:.22em;color:#8a9e6a;text-transform:uppercase;margin-bottom:1.2rem;font-weight:300">Faltan</p>
+
+      <div class="countdown">
+        <div class="cd-box"><span class="cd-num" id="cd-d">--</span><span class="cd-lbl">Días</span></div>
+        <div class="cd-box"><span class="cd-num" id="cd-h">--</span><span class="cd-lbl">Horas</span></div>
+        <div class="cd-box"><span class="cd-num" id="cd-m">--</span><span class="cd-lbl">Min</span></div>
+        <div class="cd-box"><span class="cd-num" id="cd-s">--</span><span class="cd-lbl">Seg</span></div>
+      </div>
+
+      <div class="divider"><div class="dl"></div><div class="dd"></div><div class="dl"></div></div>
+
+      <p class="section-title" style="margin-bottom:1.2rem">Programa</p>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <p class="tl-time">1:30 de la tarde</p>
+          <p class="tl-name">Discurso</p>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <p class="tl-time">3:00 de la tarde</p>
+          <p class="tl-name">Recepción</p>
+          <p class="tl-place">Jardín de Eventos</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GALERÍA POLAROID -->
+  <div class="slider-section">
+    <div class="sec-inner" style="margin-bottom:1.2rem">
+      <p class="section-title">Nuestra historia</p>
+      <p class="section-sub">Galería de recuerdos</p>
+    </div>
+    <div class="slider-wrap" id="sliderWrap">
+      <div class="slider-track">
+        <div class="polaroid">
+          <img class="polaroid-img" src="foto2.jpg" alt="Kevin y Lorena">
+          <div class="polaroid-caption">Kevin &amp; Lorena</div>
+        </div>
+        <div class="polaroid">
+          <img class="polaroid-img" src="foto3.jpg" alt="Nuestra historia">
+          <div class="polaroid-caption">Nuestra historia</div>
+        </div>
+        <div class="polaroid">
+          <img class="polaroid-img" src="foto4.jpg" alt="Para siempre">
+          <div class="polaroid-caption">Para siempre</div>
+        </div>
+      </div>
+    </div>
+    <p class="slider-hint">&#8592; Desliza para ver más &#8594;</p>
+  </div>
+
+  <!-- VESTIMENTA -->
+  <div class="green-section">
+    <div class="sec-inner">
+      <div class="divider"><div class="dl"></div><div class="dd"></div><div class="dd" style="opacity:.4;margin:0 -3px;transform:rotate(45deg) scale(.6)"></div><div class="dd"></div><div class="dl"></div></div>
+      <p class="section-title">Código de vestimenta</p>
+      <p class="section-sub">Etiqueta formal</p>
+
+      <div class="dress-card">
+        <svg width="170" height="22" viewBox="0 0 170 22" fill="none" style="margin-bottom:1.4rem">
+          <path d="M10 11 Q42 2 85 11 Q128 20 160 11" stroke="#5a7a38" stroke-width=".6" fill="none"/>
+          <circle cx="85" cy="11" r="3.5" fill="#c9b882"/>
+          <ellipse cx="48" cy="5" rx="9" ry="3" fill="#5a7a38" opacity=".45" transform="rotate(-12 48 5)"/>
+          <ellipse cx="122" cy="17" rx="9" ry="3" fill="#5a7a38" opacity=".45" transform="rotate(12 122 17)"/>
+        </svg>
+
+        <div class="dress-row">
+          <div class="dress-icon">
+            <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+              <path d="M8 3l-3 7h16l-3-7H8z" stroke="#c9b882" stroke-width=".8" fill="none"/>
+              <path d="M5 10v13h16V10" stroke="#c9b882" stroke-width=".8" fill="none"/>
+              <path d="M10 10v5a3 3 0 006 0v-5" stroke="#c9b882" stroke-width=".8" fill="none"/>
+            </svg>
+          </div>
+          <div class="dress-text">
+            <strong>Damas</strong>
+            <p>Vestido largo o midi de gala. Tonos tierra, vino, verde olivo, azul noche, nude o dorado.</p>
+          </div>
+        </div>
+
+        <div class="dress-row">
+          <div class="dress-icon">
+            <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+              <path d="M9 3l-3 7h14l-3-7H9z" stroke="#c9b882" stroke-width=".8" fill="none"/>
+              <rect x="6" y="10" width="14" height="13" rx="1" stroke="#c9b882" stroke-width=".8" fill="none"/>
+              <path d="M13 10v13" stroke="#c9b882" stroke-width=".6" stroke-dasharray="2 2"/>
+            </svg>
+          </div>
+          <div class="dress-text">
+            <strong>Caballeros</strong>
+            <p>Traje formal. Colores oscuros: negro, gris carbón, azul marino o verde olivo. Corbata o moño.</p>
+          </div>
+        </div>
+
+        <div class="no-white">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" style="flex-shrink:0">
+            <circle cx="11" cy="11" r="9.5" stroke="#c47070" stroke-width=".8"/>
+            <path d="M7 7l8 8M15 7l-8 8" stroke="#c47070" stroke-width="1.3" stroke-linecap="round"/>
+          </svg>
+          <p>Por favor evitar vestidos en blanco, marfil o crema — ese color es reservado para la novia</p>
+        </div>
+
+        <div style="margin-top:1.6rem">
+          <p style="font-size:12px;letter-spacing:.18em;color:#8a9e6a;text-transform:uppercase;margin-bottom:.9rem;font-weight:300">Paleta sugerida</p>
+          <div class="palette">
+            <div class="swatch-wrap"><div class="swatch" style="background:#3b4e2a"></div><p class="swatch-lbl">Olivo</p></div>
+            <div class="swatch-wrap"><div class="swatch" style="background:#1a2540"></div><p class="swatch-lbl">Noche</p></div>
+            <div class="swatch-wrap"><div class="swatch" style="background:#6b2d3e"></div><p class="swatch-lbl">Vino</p></div>
+            <div class="swatch-wrap"><div class="swatch" style="background:#c9b882"></div><p class="swatch-lbl">Dorado</p></div>
+            <div class="swatch-wrap"><div class="swatch" style="background:#4a3728"></div><p class="swatch-lbl">Cacao</p></div>
+            <div class="swatch-wrap"><div class="swatch" style="background:#8a7060"></div><p class="swatch-lbl">Nude</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MESA DE REGALOS -->
+  <div class="dark-section">
+    <div class="dark-inner">
+      <div class="divider"><div class="dl"></div><div class="dd"></div><div class="dd" style="opacity:.4;margin:0 -3px;transform:rotate(45deg) scale(.6)"></div><div class="dd"></div><div class="dl"></div></div>
+      <p class="section-title">Mesa de regalos</p>
+      <p class="section-sub">Su compañía es lo más importante</p>
+
+      <div class="gifts-card">
+        <p class="gift-msg">
+          Su presencia en este día especial es el regalo más grande que podemos recibir.<br>
+          Si desean hacernos un obsequio, con mucho cariño pueden hacerlo.
+        </p>
+
+        <div class="transfer-box">
+          <p class="transfer-bank">BBVA · Cuenta</p>
+          <p class="transfer-name">Kevin Gomez</p>
+          <p class="transfer-num">1234 5678 9012</p>
+          <p class="transfer-clabe">CLABE: 012 345 6789 0123 4567 8</p>
+          <button class="copy-btn" onclick="copiar(this,'012 345 6789 0123 4567 8','ok1')">Copiar CLABE</button>
+          <p class="copy-ok" id="ok1">¡Copiado!</p>
+        </div>
+
+        <div class="transfer-box">
+          <p class="transfer-bank">BBVA · Cuenta</p>
+          <p class="transfer-name">Lorena Torres</p>
+          <p class="transfer-num">9876 5432 1098</p>
+          <p class="transfer-clabe">CLABE: 012 987 6543 2109 8765 4</p>
+          <button class="copy-btn" onclick="copiar(this,'012 987 6543 2109 8765 4','ok2')">Copiar CLABE</button>
+          <p class="copy-ok" id="ok2">¡Copiado!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTONES -->
+  <div class="btns-section">
+    <div class="btns-inner">
+      <div class="divider"><div class="dl"></div><div class="dd"></div><div class="dd" style="opacity:.4;margin:0 -3px;transform:rotate(45deg) scale(.6)"></div><div class="dd"></div><div class="dl"></div></div>
+      <div class="btns-grid">
+        <a class="btn-o" href="https://maps.app.goo.gl/UxPM3Jxhpve7aR3K8" target="_blank" rel="noopener">
+          <svg width="17" height="17" viewBox="0 0 16 16" fill="none"><path d="M8 1.5C5.5 1.5 3.5 3.5 3.5 6c0 3.5 4.5 8.5 4.5 8.5s4.5-5 4.5-8.5c0-2.5-2-4.5-4.5-4.5z" fill="#e8e0c8"/><circle cx="8" cy="6" r="1.5" fill="#3a5028"/></svg>
+          Jardín de Eventos
+        </a>
+        <a class="btn-o" href="https://maps.app.goo.gl/9Z95UFtHM8x9MSAWA" target="_blank" rel="noopener">
+          <svg width="17" height="17" viewBox="0 0 16 16" fill="none"><path d="M8 1.5C5.5 1.5 3.5 3.5 3.5 6c0 3.5 4.5 8.5 4.5 8.5s4.5-5 4.5-8.5c0-2.5-2-4.5-4.5-4.5z" fill="#e8e0c8"/><circle cx="8" cy="6" r="1.5" fill="#3a5028"/></svg>
+          Discurso
+        </a>
+      </div>
+
+      <button class="btn-full" onclick="toggleForm()" style="margin-top:2px">Confirmar asistencia</button>
+
+      <div class="form-box" id="form-box">
+        <p>¿Nos acompañarás?</p>
+        <input type="text" id="cf-nombre" placeholder="Tu nombre completo">
+        <div class="form-btns">
+          <button class="fbtn-y" onclick="enviar('si')">Con gusto asistiré</button>
+          <button class="fbtn-n" onclick="enviar('no')">No podré ir</button>
+        </div>
+      </div>
+      <div class="thanks-box" id="thanks-box"><p id="thanks-msg"></p></div>
+    </div>
+  </div>
+
+  <p class="hashtag">#KevinYLorenaParaSiempre</p>
+</div>
+
+<script>
+var WEDDING = new Date('2026-05-31T13:30:00');
+
+function tick() {
+  var diff = WEDDING - new Date();
+  if (diff <= 0) {
+    ['cd-d','cd-h','cd-m','cd-s'].forEach(function(id){document.getElementById(id).textContent='00';});
+    return;
+  }
+  document.getElementById('cd-d').textContent = String(Math.floor(diff/86400000)).padStart(2,'0');
+  document.getElementById('cd-h').textContent = String(Math.floor((diff%86400000)/3600000)).padStart(2,'0');
+  document.getElementById('cd-m').textContent = String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
+  document.getElementById('cd-s').textContent = String(Math.floor((diff%60000)/1000)).padStart(2,'0');
+}
+
+function openEnvelope() {
+  var env = document.getElementById('envelope');
+  if (env.classList.contains('opened')) return;
+  env.classList.add('opened');
+  setTimeout(function() {
+    document.getElementById('scene').style.display = 'none';
+    document.getElementById('invite').classList.add('visible');
+    tick();
+    setInterval(tick, 1000);
+    initSlider();
+  }, 980);
+}
+
+function toggleForm() {
+  document.getElementById('form-box').classList.toggle('show');
+  document.getElementById('thanks-box').classList.remove('show');
+}
+
+function enviar(resp) {
+  var nombre = document.getElementById('cf-nombre').value.trim() || 'Invitado';
+  document.getElementById('thanks-msg').textContent = resp === 'si'
+    ? '¡Gracias, ' + nombre + '! Kevin y Lorena están muy felices de contar contigo en su día especial.'
+    : 'Gracias por avisarnos, ' + nombre + '. Los tendremos en mente con mucho cariño.';
+  document.getElementById('form-box').classList.remove('show');
+  document.getElementById('thanks-box').classList.add('show');
+}
+
+function copiar(btn, texto, okId) {
+  navigator.clipboard.writeText(texto).then(function() {
+    var ok = document.getElementById(okId);
+    ok.style.display = 'block';
+    var orig = btn.textContent;
+    btn.textContent = '¡Copiado!';
+    setTimeout(function(){ ok.style.display='none'; btn.textContent=orig; }, 2500);
+  });
+}
+
+function initSlider() {
+  var wrap = document.getElementById('sliderWrap');
+  var startX = 0, scrollLeft = 0, down = false;
+  wrap.addEventListener('mousedown', function(e){ down=true; startX=e.pageX-wrap.offsetLeft; scrollLeft=wrap.scrollLeft; });
+  wrap.addEventListener('mouseleave', function(){ down=false; });
+  wrap.addEventListener('mouseup', function(){ down=false; });
+  wrap.addEventListener('mousemove', function(e){ if(!down)return; e.preventDefault(); wrap.scrollLeft=scrollLeft-(e.pageX-wrap.offsetLeft-startX); });
+  wrap.addEventListener('touchstart', function(e){ startX=e.touches[0].pageX-wrap.offsetLeft; scrollLeft=wrap.scrollLeft; },{passive:true});
+  wrap.addEventListener('touchmove', function(e){ wrap.scrollLeft=scrollLeft-(e.touches[0].pageX-wrap.offsetLeft-startX); },{passive:true});
+}
+</script>
+</body>
+</html>
