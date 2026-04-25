@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lorena &amp; Kevin · 31 de Mayo 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Great+Vibes&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;font-family:'Cormorant Garamond',Georgia,serif;background:#f0ebe0;overflow-x:hidden}
+
+/* ─── SOBRE ─── */
+#scene{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.6rem;background:radial-gradient(ellipse at center,#e8e0ce 0%,#d4c9b0 100%);cursor:pointer;padding:2rem}
+.env-hint{font-size:13px;letter-spacing:.28em;color:#7a8c5a;text-transform:uppercase;animation:pulse 2.2s infinite;font-family:'Cormorant Garamond',serif;font-weight:300}
+@keyframes pulse{0%,100%{opacity:.3}50%{opacity:.9}}
+
+.envelope{width:340px;height:220px;position:relative;filter:drop-shadow(0 14px 36px rgba(120,100,60,.35));transition:transform .3s}
+.envelope:hover{transform:translateY(-5px)}
+.env-body{position:absolute;bottom:0;left:0;width:100%;height:190px;background:linear-gradient(160deg,#e8e0ce 0%,#d8cfb8 100%);border-radius:2px 2px 4px 4px;border:1px solid #c8b88a}
+.env-body::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.06) 0%,transparent 40%);border-radius:inherit}
+.env-back{position:absolute;top:0;left:0;width:0;height:0;border-left:170px solid transparent;border-right:170px solid transparent;border-top:110px solid #ccc0a0;z-index:1}
+.env-left{position:absolute;bottom:0;left:0;width:0;height:0;border-bottom:95px solid #e0d8c0;border-right:170px solid transparent;z-index:2}
+.env-right{position:absolute;bottom:0;right:0;width:0;height:0;border-bottom:95px solid #d8d0b8;border-left:170px solid transparent;z-index:2}
+.env-flap{position:absolute;top:0;left:0;width:0;height:0;border-left:170px solid transparent;border-right:170px solid transparent;border-top:110px solid #d4c8a8;z-index:4;transform-origin:top center;transition:transform .75s cubic-bezier(.4,0,.2,1)}
+.envelope.opened .env-flap{transform:rotateX(-185deg)}
+.env-seal{position:absolute;top:62px;left:50%;transform:translateX(-50%);width:44px;height:44px;background:radial-gradient(circle at 35% 35%,#8aaa68,#6b8f52);border-radius:50%;z-index:5;display:flex;align-items:center;justify-content:center;font-size:15px;color:#faf8f3;font-family:'Playfair Display',serif;font-style:italic;font-weight:500;border:2px solid #9ab878;box-shadow:0 2px 8px rgba(0,0,0,.2),inset 0 1px 2px rgba(255,255,255,.2);transition:transform .35s .1s,opacity .35s .1s}
+.envelope.opened .env-seal{transform:translateX(-50%) scale(0);opacity:0}
+.env-letter{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);width:250px;height:155px;background:#faf7f2;border-radius:1px;z-index:3;display:flex;align-items:center;justify-content:center;border:.5px solid #c8b88a;clip-path:inset(0 0 100% 0);transition:clip-path 0s,bottom .55s .4s,transform .55s .4s}
+.envelope.opened .env-letter{clip-path:inset(0 0 0% 0);bottom:52px;transform:translateX(-50%) translateY(-48px)}
+.env-li{text-align:center;padding:12px}
+.env-li .sm{font-size:10px;letter-spacing:.22em;color:#9ab87a;text-transform:uppercase;margin-bottom:7px}
+.env-li .nm{font-family:'Great Vibes',cursive;font-size:28px;color:#6b8f52;line-height:1.1}
+.env-li .dt{font-size:11px;letter-spacing:.15em;color:#9a8a6a;text-transform:uppercase;margin-top:5px;font-weight:300}
+
+/* ─── INVITACIÓN ─── */
+.invite{display:none;width:100%}
+.invite.visible{display:block}
+
+/* SCROLL ANIMATIONS */
+.reveal{opacity:0;transform:translateX(-60px);transition:opacity .7s ease,transform .7s ease}
+.reveal.from-right{transform:translateX(60px)}
+.reveal.from-bottom{transform:translateY(45px)}
+.reveal.visible-now{opacity:1;transform:translate(0)}
+
+/* HERO */
+.hero{position:relative;width:100%;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;background:#e8e0ce}
+.hero-bg{position:absolute;inset:0;background-image:url('foto1.jpg');background-size:cover;background-position:center}
+.hero-content{position:relative;z-index:2;text-align:center;padding:3rem 1.5rem;width:100%}
+.nos-casamos{font-family:'Great Vibes',cursive;font-size:68px;color:#fff;line-height:1.1;margin-bottom:.4rem;text-shadow:0 2px 18px rgba(0,0,0,.55)}
+.hero-names{font-family:'Great Vibes',cursive;font-size:100px;color:#fff;line-height:1;text-shadow:0 3px 22px rgba(0,0,0,.6)}
+.hero-y{display:block;font-family:'Great Vibes',cursive;font-size:72px;color:#e8dfc0;line-height:1;position:relative;z-index:5;text-shadow:0 2px 16px rgba(0,0,0,.6)}
+.hero-date{font-size:32px;letter-spacing:.18em;color:#fff;text-transform:uppercase;margin-top:1.3rem;font-weight:300;text-shadow:0 2px 14px rgba(0,0,0,.6);white-space:nowrap;display:block;text-align:center;width:100%}
+
+/* SECCIONES BEIGE */
+.beige-section{background:#f0ebe0;padding:3.2rem 1.5rem}
+.cream-section{background:#e8e0ce;padding:3.2rem 1.5rem}
+.sec-inner{max-width:540px;margin:0 auto;text-align:center}
+
+/* COUNTDOWN */
+.countdown{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:0 auto 2.4rem;max-width:420px}
+.cd-box{background:#6b8f52;border-radius:8px;padding:16px 4px;border:.5px solid #9ab87a}
+.cd-num{font-family:'Playfair Display',serif;font-size:38px;color:#faf8f3;line-height:1;display:block;text-align:center}
+.cd-lbl{font-size:13px;letter-spacing:.15em;color:#c8d8a8;text-transform:uppercase;margin-top:6px;display:block;text-align:center}
+
+/* TIMELINE */
+.timeline{text-align:left;border-left:1px solid #9ab87a;margin:1.4rem auto;max-width:380px;padding-left:2rem}
+.tl-item{position:relative;margin-bottom:2.2rem}
+.tl-item:last-child{margin-bottom:0}
+.tl-dot{position:absolute;left:-2.45rem;top:8px;width:13px;height:13px;background:#9ab87a;border-radius:50%;border:2px solid #f0ebe0}
+.tl-time{font-size:36px;letter-spacing:.08em;color:#9ab87a;margin-bottom:4px;font-weight:300;font-family:'Cormorant Garamond',serif}
+.tl-name{font-family:'Playfair Display',serif;font-size:38px;color:#3a3020;font-style:italic;line-height:1.1}
+.tl-place{font-size:22px;color:#9a8a6a;margin-top:4px}
+
+/* DIVIDER */
+.divider{display:flex;align-items:center;justify-content:center;gap:10px;margin:1.6rem 0}
+.dl{flex:1;max-width:90px;height:.5px;background:#c8d8a8}
+.dd{width:6px;height:6px;background:#9ab87a;transform:rotate(45deg);flex-shrink:0}
+
+/* SECTION HEADER */
+.section-title{font-family:'Great Vibes',cursive;font-size:50px;color:#6b8f52;margin-bottom:.3rem;line-height:1.1}
+.section-sub{font-size:12px;letter-spacing:.25em;color:#9a8a6a;text-transform:uppercase;margin-bottom:1.8rem;font-weight:300}
+
+/* SLIDER POLAROID */
+.slider-section{background:#e8e0ce;padding:2.8rem 0 3.2rem}
+.slider-wrap{overflow-x:auto;width:100%;cursor:grab;user-select:none;scrollbar-width:none;-ms-overflow-style:none}
+.slider-wrap::-webkit-scrollbar{display:none}
+.slider-track{display:flex;gap:20px;padding:24px 36px 28px;width:max-content}
+.polaroid{flex-shrink:0;width:380px;background:#fff;padding:10px 10px 14px;border-radius:2px;transform:rotate(-2.5deg);box-shadow:4px 8px 24px rgba(100,80,40,.25),0 2px 6px rgba(100,80,40,.15);transition:transform .4s ease,box-shadow .4s ease}
+.polaroid:nth-child(even){transform:rotate(2deg)}
+.polaroid:nth-child(3n){transform:rotate(-1.2deg)}
+.polaroid:hover{transform:rotate(0deg) scale(1.03)!important;box-shadow:8px 14px 36px rgba(100,80,40,.3)!important;z-index:10}
+.polaroid-img{width:100%;height:420px;object-fit:cover;display:block;background:#d4c9b0}
+.polaroid-caption{text-align:center;font-family:'Great Vibes',cursive;font-size:24px;color:#6b8f52;margin-top:6px;line-height:1}
+.slider-hint{text-align:center;font-size:16px;color:#9a8a6a;margin-top:1.4rem;letter-spacing:.1em;font-style:italic}
+
+/* VESTIMENTA */
+.dress-card{background:#fff;border:.5px solid #c8b88a;border-radius:8px;padding:2.2rem;box-shadow:0 2px 16px rgba(100,80,40,.08)}
+.dress-simple{display:flex;align-items:center;gap:16px;margin-bottom:1.2rem;text-align:left;padding-bottom:1.2rem;border-bottom:.5px solid #e8dfc8}
+.dress-simple:last-of-type{margin-bottom:0;padding-bottom:0;border-bottom:none}
+.dress-icon{flex-shrink:0}
+.dress-text p{font-size:22px;color:#4a3a20;line-height:1.5}
+.no-white{background:#fdf8f0;border:.5px solid #e0c8a8;border-radius:6px;padding:14px 18px;margin-top:1.6rem;display:flex;align-items:center;gap:14px}
+.no-white p{font-size:18px;color:#a06050;font-style:italic;line-height:1.65}
+.palette{display:flex;gap:14px;justify-content:center;margin-top:1.8rem;flex-wrap:wrap}
+.swatch-wrap{display:flex;flex-direction:column;align-items:center;gap:5px}
+.swatch{width:38px;height:38px;border-radius:50%;border:.5px solid rgba(0,0,0,.08)}
+.swatch-lbl{font-size:12px;color:#9a8a6a;letter-spacing:.05em}
+
+/* REGALOS */
+.gifts-card{background:#fff;border:.5px solid #c8b88a;border-radius:8px;padding:2.2rem;box-shadow:0 2px 16px rgba(100,80,40,.08)}
+.gift-msg{font-size:20px;color:#5a4a30;line-height:1.9;font-style:italic;margin-bottom:1.8rem}
+.acc-btn{width:100%;background:#6b8f52;color:#f0ebe0;border:.5px solid #9ab87a;border-radius:6px;padding:16px 20px;font-family:'Cormorant Garamond',serif;font-size:20px;letter-spacing:.06em;cursor:pointer;display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;transition:background .2s}
+.acc-btn:hover{background:#9ab87a}
+.acc-arrow{transition:transform .35s;font-size:16px;color:#c8d8a8}
+.acc-btn.open .acc-arrow{transform:rotate(180deg)}
+.acc-body{display:none;background:#faf7f2;border:.5px solid #c8b88a;border-radius:6px;padding:1.4rem 1.6rem;margin-bottom:10px;animation:fadeUp .35s ease}
+.acc-body.show{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.transfer-bank{font-size:13px;letter-spacing:.22em;color:#9a8a6a;text-transform:uppercase;margin-bottom:.4rem}
+.transfer-name{font-family:'Cormorant Garamond',serif;font-size:15px;color:#9a8a6a;font-style:normal;margin-bottom:.4rem;letter-spacing:.05em}
+.transfer-num{font-size:22px;color:#6b8f52;letter-spacing:.06em;margin-bottom:.3rem;font-family:'Playfair Display',serif}
+.transfer-clabe{font-size:15px;color:#9a8a6a;letter-spacing:.04em}
+.copy-btn{background:transparent;border:.5px solid #9ab87a;color:#7a9a5a;font-size:14px;letter-spacing:.15em;text-transform:uppercase;padding:8px 18px;border-radius:4px;cursor:pointer;margin-top:1rem;font-family:'Cormorant Garamond',serif;transition:all .2s;display:inline-block}
+.copy-btn:hover{background:#6b8f52;color:#f0ebe0}
+.copy-ok{display:none;font-size:14px;color:#7a9a5a;margin-top:6px;font-style:italic}
+
+/* BOTONES FINALES */
+.btns-section{background:#f0ebe0;padding:2.2rem 1.5rem 3rem}
+.btns-inner{max-width:540px;margin:0 auto}
+.btns-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.btn-o{background:#6b8f52;color:#f0ebe0;border:.5px solid #9ab87a;border-radius:6px;padding:18px 8px;font-family:'Cormorant Garamond',serif;font-size:19px;letter-spacing:.06em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;transition:background .2s;text-decoration:none;width:100%}
+.btn-o:hover{background:#9ab87a}
+.btn-full{width:100%;background:#9ab87a;color:#fff;border:none;border-radius:6px;padding:18px;font-family:'Playfair Display',serif;font-size:22px;font-style:italic;cursor:pointer;letter-spacing:.05em;transition:background .2s}
+.btn-full:hover{background:#edf5e4;border-color:#6b8f52;box-shadow:0 2px 14px rgba(100,140,60,.18)}
+.form-box{display:none;background:#fff;border:.5px solid #c8b88a;border-radius:6px;padding:24px;margin-top:14px;animation:fadeUp .4s ease;box-shadow:0 2px 16px rgba(100,80,40,.08)}
+.form-box.show{display:block}
+.form-box p{font-family:'Playfair Display',serif;font-size:22px;color:#3a3020;font-style:italic;margin-bottom:16px;text-align:center}
+.form-box input{width:100%;margin-bottom:12px;padding:13px 16px;border:.5px solid #c8b88a;border-radius:6px;font-family:'Cormorant Garamond',serif;font-size:19px;background:#faf7f2;color:#3a3020}
+.form-box input::placeholder{color:#b0a080}
+.form-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fbtn-y{background:#6b8f52;color:#f0ebe0;border:none;border-radius:6px;padding:14px;font-family:'Cormorant Garamond',serif;font-size:19px;cursor:pointer;transition:background .2s}
+.fbtn-y:hover{background:#9ab87a}
+.fbtn-n{background:transparent;color:#6a5a40;border:.5px solid #c8b88a;border-radius:6px;padding:14px;font-family:'Cormorant Garamond',serif;font-size:19px;cursor:pointer}
+.thanks-box{display:none;background:#fff;border:.5px solid #c8b88a;border-radius:6px;padding:24px;margin-top:14px;text-align:center;animation:fadeUp .4s ease}
+.thanks-box.show{display:block}
+.thanks-box p{font-family:'Playfair Display',serif;font-size:20px;color:#4a3a20;font-style:italic;line-height:1.85}
+.hashtag{text-align:center;padding:2.2rem 1rem 3.2rem;font-size:17px;color:#9a8a6a;font-style:italic;letter-spacing:.07em;background:#e8e0ce}
+
+@media(max-width:480px){
+  .nos-casamos{font-size:52px}.hero-names{font-size:76px}.hero-y{font-size:44px}.hero-date{font-size:20px;letter-spacing:.1em}
+  .cd-num{font-size:30px}
+  .tl-name{font-size:30px}.tl-time{font-size:28px}.tl-place{font-size:18px}
+  .polaroid{width:280px}.polaroid-img{height:300px}
+  .envelope{width:290px;height:190px}
+  .env-back,.env-flap{border-left-width:145px;border-right-width:145px}
+  .env-left{border-right-width:145px}.env-right{border-left-width:145px}
+}
+</style>
+</head>
+<body>
+
+<!-- SOBRE -->
+<div id="scene" onclick="openEnvelope()">
+  <div class="envelope" id="envelope">
+    <div class="env-body"></div>
+    <div class="env-back"></div>
+    <div class="env-left"></div>
+    <div class="env-right"></div>
+    <div class="env-flap"></div>
+    <div class="env-seal">L&amp;K</div>
+    <div class="env-letter">
+      <div class="env-li">
+        <div class="sm">¡Nos casamos!</div>
+        <div class="nm">Lorena &amp; Kevin</div>
+        <div class="dt">31 · Mayo · 2026</div>
+      </div>
+    </div>
+  </div>
+  <p class="env-hint">Toca para abrir</p>
+</div>
+
+<!-- INVITACIÓN -->
+<div class="invite" id="invite">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <svg width="270" height="38" viewBox="0 0 270 38" fill="none" style="margin-bottom:.9rem">
+        <path d="M14 19 Q67 4 135 19 Q203 34 256 19" stroke="rgba(255,255,255,.5)" stroke-width=".9" fill="none"/>
+        <ellipse cx="48" cy="10" rx="13" ry="4" fill="rgba(255,255,255,.3)" transform="rotate(-18 48 10)"/>
+        <ellipse cx="82" cy="6" rx="13" ry="4" fill="rgba(255,255,255,.24)" transform="rotate(-6 82 6)"/>
+        <ellipse cx="112" cy="9" rx="13" ry="4" fill="rgba(255,255,255,.3)" transform="rotate(4 112 9)"/>
+        <ellipse cx="135" cy="16" rx="14" ry="4.5" fill="rgba(255,255,255,.36)"/>
+        <ellipse cx="158" cy="22" rx="13" ry="4" fill="rgba(255,255,255,.3)" transform="rotate(-4 158 22)"/>
+        <ellipse cx="188" cy="26" rx="13" ry="4" fill="rgba(255,255,255,.24)" transform="rotate(6 188 26)"/>
+        <ellipse cx="222" cy="24" rx="13" ry="4" fill="rgba(255,255,255,.3)" transform="rotate(18 222 24)"/>
+        <circle cx="135" cy="16" r="3.5" fill="#c9b882" opacity=".8"/>
+      </svg>
+
+      <p class="nos-casamos">¡Nos casamos!</p>
+      <div class="hero-names">
+        Lorena
+        <span class="hero-y">y</span>
+        Kevin
+      </div>
+      <p class="hero-date">31 &nbsp;·&nbsp; Mayo &nbsp;·&nbsp; 2026</p>
+
+      <svg width="270" height="38" viewBox="0 0 270 38" fill="none" style="margin-top:.9rem">
+        <path d="M14 19 Q67 34 135 19 Q203 4 256 19" stroke="rgba(255,255,255,.5)" stroke-width=".9" fill="none"/>
+        <ellipse cx="48" cy="28" rx="13" ry="4" fill="rgba(255,255,255,.3)" transform="rotate(18 48 28)"/>
+        <ellipse cx="82" cy="32" rx="13" ry="4" fill="rgba(255,255,255,.24)" transform="rotate(6 82 32)"/>
+        <ellipse cx="112" cy="29" rx="13" ry="4" fill="rgba(255,255,255,.3)" transform="rotate(-4 112 29)"/>
+        <ellipse cx="135" cy="22" rx="14" ry="4.5" fill="rgba(255,255,255,.36)"/>
+        <ellipse cx="158" cy="16" rx="13" ry="4" fill="rgba(255,255,255,.3)" transform="rotate(4 158 16)"/>
+        <ellipse cx="188" cy="12" rx="13" ry="4" fill="rgba(255,255,255,.24)" transform="rotate(-6 188 12)"/>
+        <ellipse cx="222" cy="14" rx="13" ry="4" fill="rgba(255,255,255,.3)" transform="rotate(-18 222 14)"/>
+        <circle cx="135" cy="22" r="3.5" fill="#c9b882" opacity=".8"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- CUENTA REGRESIVA + PROGRAMA -->
+  <div class="beige-section">
+    <div class="sec-inner">
+      <div class="divider reveal"><div class="dl"></div><div class="dd"></div><div class="dd" style="opacity:.4;margin:0 -3px;transform:rotate(45deg) scale(.6)"></div><div class="dd"></div><div class="dl"></div></div>
+      <p class="reveal from-bottom" style="font-size:14px;letter-spacing:.22em;color:#9a8a6a;text-transform:uppercase;margin-bottom:1.3rem;font-weight:300">Faltan</p>
+      <div class="countdown reveal from-bottom">
+        <div class="cd-box"><span class="cd-num" id="cd-d">--</span><span class="cd-lbl">Días</span></div>
+        <div class="cd-box"><span class="cd-num" id="cd-h">--</span><span class="cd-lbl">Horas</span></div>
+        <div class="cd-box"><span class="cd-num" id="cd-m">--</span><span class="cd-lbl">Min</span></div>
+        <div class="cd-box"><span class="cd-num" id="cd-s">--</span><span class="cd-lbl">Seg</span></div>
+      </div>
+      <div class="divider reveal"><div class="dl"></div><div class="dd"></div><div class="dl"></div></div>
+      <p class="section-title reveal from-bottom">Programa</p>
+      <div class="timeline">
+        <div class="tl-item reveal">
+          <div class="tl-dot"></div>
+          <p class="tl-time">1:30 pm</p>
+          <p class="tl-name">Discurso</p>
+        </div>
+        <div class="tl-item reveal from-right">
+          <div class="tl-dot"></div>
+          <p class="tl-time">3:00 pm</p>
+          <p class="tl-name">Recepción</p>
+          <p class="tl-place">Jardín de Eventos</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GALERÍA POLAROID -->
+  <div class="slider-section">
+    <div class="sec-inner" style="margin-bottom:1.4rem;padding:0 1.5rem">
+      <p class="section-title reveal from-bottom">Nuestra historia</p>
+      <p class="section-sub reveal from-bottom">Galería de recuerdos</p>
+    </div>
+    <div class="slider-wrap" id="sliderWrap">
+      <div class="slider-track">
+        <div class="polaroid">
+          <img class="polaroid-img" src="foto2.jpg" alt="Lorena y Kevin">
+          <div class="polaroid-caption">Lorena &amp; Kevin</div>
+        </div>
+        <div class="polaroid">
+          <img class="polaroid-img" src="foto3.jpg" alt="Nuestra historia">
+          <div class="polaroid-caption">Nuestra historia</div>
+        </div>
+        <div class="polaroid">
+          <img class="polaroid-img" src="foto4.jpg" alt="Para siempre">
+          <div class="polaroid-caption">Para siempre</div>
+        </div>
+        <div class="polaroid">
+          <img class="polaroid-img" src="foto5.jpg" alt="Momentos">
+          <div class="polaroid-caption">Momentos</div>
+        </div>
+        <div class="polaroid">
+          <img class="polaroid-img" src="foto6.jpg" alt="Juntos">
+          <div class="polaroid-caption">Juntos</div>
+        </div>
+      </div>
+    </div>
+    <p class="slider-hint reveal from-bottom">&#8592; Desliza para ver más &#8594;</p>
+  </div>
+
+  <!-- VESTIMENTA -->
+  <div class="beige-section">
+    <div class="sec-inner">
+      <div class="divider reveal"><div class="dl"></div><div class="dd"></div><div class="dd" style="opacity:.4;margin:0 -3px;transform:rotate(45deg) scale(.6)"></div><div class="dd"></div><div class="dl"></div></div>
+      <p class="section-title reveal from-bottom">Código de vestimenta</p>
+      <p class="section-sub reveal from-bottom">Etiqueta formal</p>
+      <div class="dress-card">
+        <svg width="190" height="22" viewBox="0 0 190 22" fill="none" style="margin-bottom:1.6rem">
+          <path d="M10 11 Q47 2 95 11 Q143 20 180 11" stroke="#9ab87a" stroke-width=".6" fill="none"/>
+          <circle cx="95" cy="11" r="3.5" fill="#6b8f52"/>
+          <ellipse cx="53" cy="5" rx="11" ry="3" fill="#9ab87a" opacity=".4" transform="rotate(-12 53 5)"/>
+          <ellipse cx="137" cy="17" rx="11" ry="3" fill="#9ab87a" opacity=".4" transform="rotate(12 137 17)"/>
+        </svg>
+
+        <div class="dress-simple reveal">
+          <div class="dress-icon">
+            <svg width="30" height="30" viewBox="0 0 26 26" fill="none">
+              <path d="M8 3l-3 7h16l-3-7H8z" stroke="#6b8f52" stroke-width=".8" fill="none"/>
+              <path d="M5 10v13h16V10" stroke="#6b8f52" stroke-width=".8" fill="none"/>
+              <path d="M10 10v5a3 3 0 006 0v-5" stroke="#6b8f52" stroke-width=".8" fill="none"/>
+            </svg>
+          </div>
+          <div class="dress-text"><p>Vestido largo o midi de gala</p></div>
+        </div>
+
+        <div class="dress-simple reveal from-right">
+          <div class="dress-icon">
+            <svg width="30" height="30" viewBox="0 0 26 26" fill="none">
+              <path d="M9 3l-3 7h14l-3-7H9z" stroke="#6b8f52" stroke-width=".8" fill="none"/>
+              <rect x="6" y="10" width="14" height="13" rx="1" stroke="#6b8f52" stroke-width=".8" fill="none"/>
+              <path d="M13 10v13" stroke="#6b8f52" stroke-width=".6" stroke-dasharray="2 2"/>
+            </svg>
+          </div>
+          <div class="dress-text"><p>Traje formal</p></div>
+        </div>
+
+        <div class="no-white reveal from-bottom">
+          <svg width="26" height="26" viewBox="0 0 22 22" fill="none" style="flex-shrink:0">
+            <circle cx="11" cy="11" r="9.5" stroke="#c47070" stroke-width=".8"/>
+            <path d="M7 7l8 8M15 7l-8 8" stroke="#c47070" stroke-width="1.3" stroke-linecap="round"/>
+          </svg>
+          <p>Por favor evitar vestidos en blanco, marfil o crema — ese color es reservado para la novia</p>
+        </div>
+
+        <div class="reveal from-bottom" style="margin-top:1.8rem">
+          <p style="font-size:12px;letter-spacing:.18em;color:#9a8a6a;text-transform:uppercase;margin-bottom:1rem;font-weight:300">Paleta sugerida</p>
+          <div class="palette">
+            <div class="swatch-wrap"><div class="swatch" style="background:#6b8f52"></div><p class="swatch-lbl">Olivo</p></div>
+            <div class="swatch-wrap"><div class="swatch" style="background:#1a2540"></div><p class="swatch-lbl">Noche</p></div>
+            <div class="swatch-wrap"><div class="swatch" style="background:#6b2d3e"></div><p class="swatch-lbl">Vino</p></div>
+            <div class="swatch-wrap"><div class="swatch" style="background:#c9b882"></div><p class="swatch-lbl">Dorado</p></div>
+            <div class="swatch-wrap"><div class="swatch" style="background:#4a3728"></div><p class="swatch-lbl">Cacao</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REGALOS -->
+  <div class="cream-section">
+    <div class="sec-inner">
+      <div class="divider reveal"><div class="dl"></div><div class="dd"></div><div class="dd" style="opacity:.4;margin:0 -3px;transform:rotate(45deg) scale(.6)"></div><div class="dd"></div><div class="dl"></div></div>
+      <p class="section-title reveal from-bottom">Mesa de regalos</p>
+      <p class="section-sub reveal from-bottom">Su compañía es lo más importante</p>
+      <div class="gifts-card">
+        <p class="gift-msg reveal from-bottom">Su presencia en este día especial es el regalo más grande que podemos recibir.<br>Si desean hacernos un obsequio, con mucho cariño pueden hacerlo.</p>
+
+        <button class="acc-btn reveal" id="btn1" onclick="toggleAcc('body1','btn1')">
+          <span>Cuenta Lorena</span>
+          <span class="acc-arrow">&#9660;</span>
+        </button>
+        <div class="acc-body" id="body1">
+          <p class="transfer-bank">Banco Azteca · Tarjeta</p>
+          <p class="transfer-name">Lorena Raquel Torres Resendiz</p>
+          <p class="transfer-num">4027 6658 4380 3397</p>
+          <p class="transfer-clabe">&nbsp;</p>
+          <button class="copy-btn" onclick="copiar(this,'4027665843803397','ok1')">Copiar número</button>
+          <p class="copy-ok" id="ok1">¡Copiado!</p>
+        </div>
+
+        <button class="acc-btn reveal from-right" id="btn2" onclick="toggleAcc('body2','btn2')">
+          <span>Cuenta Kevin</span>
+          <span class="acc-arrow">&#9660;</span>
+        </button>
+        <div class="acc-body" id="body2">
+          <p class="transfer-bank">BBVA · CLABE</p>
+          <p class="transfer-name">Kevin Carlos Gomez Rodriguez</p>
+          <p class="transfer-num" style="font-size:19px;letter-spacing:.03em">012 180 0158152314 6</p>
+          <p class="transfer-clabe">&nbsp;</p>
+          <button class="copy-btn" onclick="copiar(this,'0121800158152 3146','ok2')">Copiar CLABE</button>
+          <p class="copy-ok" id="ok2">¡Copiado!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTONES FINALES -->
+  <div class="btns-section">
+    <div class="btns-inner">
+      <div class="divider reveal"><div class="dl"></div><div class="dd"></div><div class="dd" style="opacity:.4;margin:0 -3px;transform:rotate(45deg) scale(.6)"></div><div class="dd"></div><div class="dl"></div></div>
+      <div class="btns-grid" style="grid-template-columns:1fr;">
+        <a class="btn-o reveal" href="https://maps.app.goo.gl/UxPM3Jxhpve7aR3K8" target="_blank" rel="noopener">
+          <svg width="19" height="19" viewBox="0 0 16 16" fill="none"><path d="M8 1.5C5.5 1.5 3.5 3.5 3.5 6c0 3.5 4.5 8.5 4.5 8.5s4.5-5 4.5-8.5c0-2.5-2-4.5-4.5-4.5z" fill="#f0ebe0"/><circle cx="8" cy="6" r="1.5" fill="#6b8f52"/></svg>
+          Jardín de Eventos
+        </a>
+        <a class="btn-o reveal from-right" href="https://maps.app.goo.gl/9Z95UFtHM8x9MSAWA" target="_blank" rel="noopener">
+          <svg width="19" height="19" viewBox="0 0 16 16" fill="none"><path d="M8 1.5C5.5 1.5 3.5 3.5 3.5 6c0 3.5 4.5 8.5 4.5 8.5s4.5-5 4.5-8.5c0-2.5-2-4.5-4.5-4.5z" fill="#f0ebe0"/><circle cx="8" cy="6" r="1.5" fill="#6b8f52"/></svg>
+          Discurso
+        </a>
+      </div>
+      <button class="btn-full reveal from-bottom" onclick="toggleForm()">Confirmar asistencia</button>
+      <div class="form-box" id="form-box">
+        <p>¿Nos acompañarás?</p>
+        <input type="text" id="cf-nombre" placeholder="Tu nombre completo">
+        <div class="form-btns">
+          <button class="fbtn-y" onclick="enviar('Sí, asistiré')">Con gusto asistiré</button>
+          <button class="fbtn-n" onclick="enviar('No podré ir')">No podré ir</button>
+        </div>
+      </div>
+      <div class="thanks-box" id="thanks-box"><p id="thanks-msg"></p></div>
+    </div>
+  </div>
+
+  <p class="hashtag reveal from-bottom">#LorenaYKevinParaSiempre</p>
+</div>
+
+<script>
+var WEDDING = new Date('2026-05-31T13:30:00');
+function tick() {
+  var diff = WEDDING - new Date();
+  if (diff <= 0) { ['cd-d','cd-h','cd-m','cd-s'].forEach(function(id){document.getElementById(id).textContent='00';}); return; }
+  document.getElementById('cd-d').textContent = String(Math.floor(diff/86400000)).padStart(2,'0');
+  document.getElementById('cd-h').textContent = String(Math.floor((diff%86400000)/3600000)).padStart(2,'0');
+  document.getElementById('cd-m').textContent = String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
+  document.getElementById('cd-s').textContent = String(Math.floor((diff%60000)/1000)).padStart(2,'0');
+}
+
+function openEnvelope() {
+  var env = document.getElementById('envelope');
+  if (env.classList.contains('opened')) return;
+  env.classList.add('opened');
+  setTimeout(function() {
+    document.getElementById('scene').style.display = 'none';
+    document.getElementById('invite').classList.add('visible');
+    tick(); setInterval(tick, 1000);
+    initSlider(); initReveal();
+  }, 980);
+}
+
+function initReveal() {
+  var els = document.querySelectorAll('.reveal');
+  var counter = 0;
+  function check() {
+    els.forEach(function(el) {
+      if (el.classList.contains('visible-now')) return;
+      if (el.getBoundingClientRect().top < window.innerHeight - 50) {
+        el.style.transitionDelay = (counter % 4) * 0.1 + 's';
+        el.classList.add('visible-now');
+        counter++;
+      }
+    });
+  }
+  window.addEventListener('scroll', check, {passive:true});
+  setTimeout(check, 100);
+}
+
+function initSlider() {
+  var wrap = document.getElementById('sliderWrap');
+  var startX = 0, scrollLeft = 0, down = false;
+  wrap.addEventListener('mousedown', function(e){ down=true; startX=e.pageX-wrap.offsetLeft; scrollLeft=wrap.scrollLeft; });
+  wrap.addEventListener('mouseleave', function(){ down=false; });
+  wrap.addEventListener('mouseup', function(){ down=false; });
+  wrap.addEventListener('mousemove', function(e){ if(!down)return; e.preventDefault(); wrap.scrollLeft=scrollLeft-(e.pageX-wrap.offsetLeft-startX); });
+  wrap.addEventListener('touchstart', function(e){ startX=e.touches[0].pageX-wrap.offsetLeft; scrollLeft=wrap.scrollLeft; },{passive:true});
+  wrap.addEventListener('touchmove', function(e){ wrap.scrollLeft=scrollLeft-(e.touches[0].pageX-wrap.offsetLeft-startX); },{passive:true});
+}
+
+function toggleAcc(bodyId, btnId) {
+  document.getElementById(bodyId).classList.toggle('show');
+  document.getElementById(btnId).classList.toggle('open');
+}
+
+function toggleForm() {
+  document.getElementById('form-box').classList.toggle('show');
+  document.getElementById('thanks-box').classList.remove('show');
+}
+
+function enviar(resp) {
+  var nombre = document.getElementById('cf-nombre').value.trim();
+  if (!nombre) { alert('Por favor escribe tu nombre'); return; }
+  var btnY = document.querySelector('.fbtn-y');
+  var btnN = document.querySelector('.fbtn-n');
+  btnY.disabled = true; btnN.disabled = true;
+  btnY.textContent = 'Enviando...';
+  fetch('https://formspree.io/f/mjgjeelb', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify({ nombre: nombre, asistencia: resp })
+  })
+  .then(function(r){ return r.json(); })
+  .then(function() {
+    var msg = resp === 'Sí, asistiré'
+      ? '¡Gracias, ' + nombre + '! Lorena y Kevin están muy felices de contar contigo en su día especial.'
+      : 'Gracias por avisarnos, ' + nombre + '. Los tendremos en mente con mucho cariño.';
+    document.getElementById('thanks-msg').textContent = msg;
+    document.getElementById('form-box').classList.remove('show');
+    document.getElementById('thanks-box').classList.add('show');
+    document.getElementById('cf-nombre').value = '';
+  })
+  .catch(function() {
+    alert('Hubo un problema. Por favor intenta de nuevo.');
+    btnY.disabled = false; btnN.disabled = false;
+    btnY.textContent = 'Con gusto asistiré';
+  });
+}
+
+function copiar(btn, texto, okId) {
+  navigator.clipboard.writeText(texto).then(function() {
+    var ok = document.getElementById(okId);
+    ok.style.display = 'block';
+    var orig = btn.textContent;
+    btn.textContent = '¡Copiado!';
+    setTimeout(function(){ ok.style.display='none'; btn.textContent=orig; }, 2500);
+  });
+}
+</script>
+</body>
+</html>
